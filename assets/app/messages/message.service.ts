@@ -5,7 +5,7 @@ import { Observable } from "rxjs/Observable";
 
 import { Message } from "./message";
 
-const SERVERURL:string = 'https://localhost/message';
+const SERVERURL:string = 'https://riziko-boron.herokuapp.com/message';
 
 @Injectable()
 export class MessageService {

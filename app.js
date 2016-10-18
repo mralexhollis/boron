@@ -10,7 +10,7 @@ var appRoutes = require('./routes/app');
 var messageRoutes = require('./routes/messages');
 
 var app = express();
-const MONGOURI = process.env.MONGODB_URI;
+const MONGOURI = process.env.MONGODB_URI || 'localhost';
 
 mongoose.connect(MONGOURI + '/node-angular');
 

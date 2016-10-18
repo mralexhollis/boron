@@ -4,13 +4,12 @@ import 'rxjs/Rx';
 import { Observable } from "rxjs/Observable";
 
 import { Message } from "./message";
-
-const SERVERURL:string = 'https://riziko-boron.herokuapp.com/message';
+import {config} from "../app.config";
 
 @Injectable()
 export class MessageService {
 
-
+    _serverUFL = config.getEnvironmentVariable('endPoint')+'/message'
     messages: Message[] = [];
     messageIsEdit = new EventEmitter<Message>();
     
@@ -19,7 +18,7 @@ export class MessageService {
     addMessage(message: Message) {
         const body = JSON.stringify(message);
         const headers = new Headers({'Content-Type': 'application/json'});
-        return this.http.post(SERVERURL, body, {headers: headers})
+        return this.http.post(this._serverUFL, body, {headers: headers})
             .map(response => {
                 const data = response.json().obj;
                 let message = new Message(data.content, data._id, 'Dummy', null);
@@ -29,7 +28,7 @@ export class MessageService {
     }
 
     getMessages() {
-        return this.http.get(SERVERURL)
+        return this.http.get(this._serverUFL)
             .map(response => {
                 const data = response.json().obj;
                 let objs: any[] = [];
@@ -45,7 +44,7 @@ export class MessageService {
     updateMessage(message: Message) {
         const body = JSON.stringify(message);
         const headers = new Headers({'Content-Type': 'application/json'});
-        return this.http.patch(SERVERURL+ '/' + message.messageId, body, {headers: headers})
+        return this.http.patch(this._serverUFL+ '/' + message.messageId, body, {headers: headers})
             .map(response => response.json())
             .catch(error => Observable.throw(error.json()));
     }
@@ -56,7 +55,7 @@ export class MessageService {
 
     deleteMessage(message: Message) {
         this.messages.splice(this.messages.indexOf(message), 1);
-        return this.http.delete(SERVERURL +'/' + message.messageId)
+        return this.http.delete(this._serverUFL +'/' + message.messageId)
             .map(response => response.json())
             .catch(error => Observable.throw(error.json()));
     }

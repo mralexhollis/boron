@@ -5,8 +5,12 @@ import { Observable } from "rxjs/Observable";
 
 import { Message } from "./message";
 
+const SERVERURL:string = 'https://localhost:3000/message';
+
 @Injectable()
 export class MessageService {
+
+
     messages: Message[] = [];
     messageIsEdit = new EventEmitter<Message>();
     
@@ -15,7 +19,7 @@ export class MessageService {
     addMessage(message: Message) {
         const body = JSON.stringify(message);
         const headers = new Headers({'Content-Type': 'application/json'});
-        return this.http.post('http://localhost:3000/message', body, {headers: headers})
+        return this.http.post(SERVERURL, body, {headers: headers})
             .map(response => {
                 const data = response.json().obj;
                 let message = new Message(data.content, data._id, 'Dummy', null);
@@ -25,7 +29,7 @@ export class MessageService {
     }
 
     getMessages() {
-        return this.http.get('http://localhost:3000/message')
+        return this.http.get(SERVERURL)
             .map(response => {
                 const data = response.json().obj;
                 let objs: any[] = [];
@@ -41,7 +45,7 @@ export class MessageService {
     updateMessage(message: Message) {
         const body = JSON.stringify(message);
         const headers = new Headers({'Content-Type': 'application/json'});
-        return this.http.patch('http://localhost:3000/message/' + message.messageId, body, {headers: headers})
+        return this.http.patch(SERVERURL+ '/' + message.messageId, body, {headers: headers})
             .map(response => response.json())
             .catch(error => Observable.throw(error.json()));
     }
@@ -52,7 +56,7 @@ export class MessageService {
 
     deleteMessage(message: Message) {
         this.messages.splice(this.messages.indexOf(message), 1);
-        return this.http.delete('http://localhost:3000/message/' + message.messageId)
+        return this.http.delete(SERVERURL +'/' + message.messageId)
             .map(response => response.json())
             .catch(error => Observable.throw(error.json()));
     }

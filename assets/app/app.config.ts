@@ -7,7 +7,7 @@ export class config {
         switch (environment) {
             case'localhost':
                 data = {
-                    endPoint: 'http://localhost'
+                    endPoint: 'http://localhost:3000'
                 };
                 break;
             case 'https://riziko-boron.herokuapp.com':
